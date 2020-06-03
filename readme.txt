@@ -37,8 +37,14 @@ git commit -m "Added App.py wrapper"
 git push
 #
 touch Dockerfile
-docker build -t cicd .
-#docker run -p 5000:5000 --rm -it cicd
+DOCKER_USER=
+DOCKER_PASS=
+docker build -t $DOCKER_USER/cicd .
+#docker build -f Dockerfile -t $DOCKER_USER/cicd:latest .
+#docker login -u $DOCKER_USER -p $DOCKER_PASS
+#docker push $DOCKER_USER/cicd:latest
+
+#docker run -p 5000:5000 --rm -it $DOCKER_USER/cicd
 #
 git add Dockerfile
 git commit -m "Dockerized"
@@ -67,7 +73,7 @@ heroku open
 #
 #HEROKU_API_KEY 
 #HEROKU_APP_NAME 
-echo "  - test '\$TRAVIS_BRANCH' = 'master' && sh .travis/deploy_heroku.sh" >> .travis.yml
+echo "  - test \"\$TRAVIS_BRANCH\" = \"master\" && sh .travis/deploy_heroku.sh" >> .travis.yml
 touch ./.travis/deploy_heroku.sh
 echo '#!/bin/sh'  >> ./.travis/deploy_heroku.sh
 echo "wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh" >> ./.travis/deploy_heroku.sh
