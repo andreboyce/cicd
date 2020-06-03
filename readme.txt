@@ -57,3 +57,27 @@ git push
 #
 docker run -p5000:5000 --rm -it andreboyce/cicd:latest
 #
+heroku login
+heroku create
+heroku plugins:install @heroku-cli/plugin-container-registry
+heroku container:login
+heroku container:push web
+heroku container:release web
+heroku open
+#
+#HEROKU_API_KEY 
+#HEROKU_APP_NAME 
+echo "  - test '\$TRAVIS_BRANCH' = 'master' && sh .travis/deploy_heroku.sh" >> .travis.yml
+touch ./.travis/deploy_heroku.sh
+echo '#!/bin/sh'  >> ./.travis/deploy_heroku.sh
+echo "wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh" >> ./.travis/deploy_heroku.sh
+echo "heroku container:login" >> ./.travis/deploy_heroku.sh
+echo "heroku container:push web --app \$HEROKU_APP_NAME" >> ./.travis/deploy_heroku.sh
+echo "heroku container:release web --app \$HEROKU_APP_NAME" >> ./.travis/deploy_heroku.sh
+
+git add ./.travis/deploy_heroku.sh
+git add .travis.yml
+git add readme.txt
+git add -A
+git commit -m "Adding Heroku Push to Travis CI"
+git push
