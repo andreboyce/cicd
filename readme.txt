@@ -27,8 +27,33 @@ git push
 git commit -m "Updated readme.txt"
 git push
 touch app.py
-echo "Flask==0.12" >> requirements.txt
+echo "Flask==1.0" >> requirements.txt
 pip install -r requirements.txt
 #python app.py
+git add app.py
+git add requirements.txt
+git add readme.txt
 git commit -m "Added App.py wrapper"
 git push
+#
+touch Dockerfile
+docker build -t cicd .
+#docker run -p 5000:5000 --rm -it cicd
+#
+git add Dockerfile
+git commit -m "Dockerized"
+git push
+#
+mkdir .travis
+touch ./.travis/deploy_dockerhub.sh
+git add ./.travis/deploy_dockerhub.sh
+#on travis-ci.org DOCKER_EMAIL
+#on travis-ci.org DOCKER_PASS
+#on travis-ci.org DOCKER_USER
+git commit -m "Travis CI push to dockerhub"
+git push
+git add -A
+git push
+#
+docker run -p5000:5000 --rm -it andreboyce/cicd:latest
+#
